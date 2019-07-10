@@ -1,0 +1,41 @@
+import empresaDeServicios.*
+import profesional.*
+import solicitantes.*
+
+describe "teste etapa 1" {
+
+	var sanMartin = new Universidad(honorarios = 3500, provincia = "buenosaires")
+	var rosario = new Universidad(honorarios = 2800, provincia = "rosario")
+	var corrientes = new Universidad(honorarios = 4200, provincia = "corrientes")
+	var hurlingham = new Universidad(honorarios = 8800, provincia = "hurlingham")
+	var juana = new ProfesionalUniversidad(universidad = rosario)
+	var melina = new ProfesionalLitoral(universidad = corrientes)
+	var rocio = new ProfesionalLibre(universidad = hurlingham, honorariosPorHora = 5000)
+	var luciana = new ProfesionalLibre(universidad = rosario, honorariosPorHora = 3200)
+	var empresaUno = new EmpresaServicios(honorarioReferencia = 3500)
+
+	fixture {
+		self.contratacionProfesionales()
+	}
+
+	method contratacionProfesionales() {
+		empresaUno.contratarProfesional(juana)
+		empresaUno.contratarProfesional(melina)
+		empresaUno.contratarProfesional(luciana)
+		empresaUno.contratarProfesional(rocio)
+	}
+
+	test "Contratar como profesionales caros, solamente a Rocío" {
+		assert.equals(rocio, empresaUno.profesionalesCaros())
+	}
+
+	test "como universidades formadoras, a las de Rosario, Corrientes y Hurlingham" {
+			assert.equals(#{rosario,corrientes,hurlingham}, empresaUno.universidadesFormadoras())
+	}
+
+	test "como profesional más barato a Juana." {
+		assert.equals(juana, empresaUno.profesionalBarato())
+	}
+
+}
+
